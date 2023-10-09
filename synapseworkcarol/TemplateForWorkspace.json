@@ -209,7 +209,10 @@
 											"coreCount": 8,
 											"computeType": "General"
 										},
-										"traceLevel": "Fine"
+										"traceLevel": "Fine",
+										"continuationSettings": {
+											"customizedCheckpointKey": "b32af5ac-ae5f-4c0d-8cad-fda212d52c70"
+										}
 									}
 								},
 								{
@@ -400,7 +403,6 @@
 			},
 			"dependsOn": [
 				"[concat(variables('workspaceId'), '/dataflows/Dataflow_GPL_analytical_store')]",
-				"[concat(variables('workspaceId'), '/integrationRuntimes/AutoResolveIntegrationRuntime')]",
 				"[concat(variables('workspaceId'), '/datasets/DS_GPL_raw')]",
 				"[concat(variables('workspaceId'), '/datasets/DS_GPL_enr')]",
 				"[concat(variables('workspaceId'), '/datasets/DS_GPL_cur')]"
