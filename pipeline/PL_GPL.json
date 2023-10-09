@@ -233,6 +233,10 @@
 			"firm_id": {
 				"type": "string",
 				"defaultValue": "146"
+			},
+			"container": {
+				"type": "string",
+				"defaultValue": "123"
 			}
 		},
 		"annotations": []
