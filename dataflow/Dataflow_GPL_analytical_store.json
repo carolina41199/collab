@@ -56,7 +56,7 @@
 				"     insertable: true,",
 				"     updateable: true,",
 				"     upsertable: false,",
-				"     keys:['_rid'],",
+				"     keys:(1),",
 				"     umask: 0022,",
 				"     preCommands: [],",
 				"     postCommands: [],",
