@@ -48,7 +48,10 @@
 								},
 								"traceLevel": "Fine",
 								"continuationSettings": {
-									"customizedCheckpointKey": "b32af5ac-ae5f-4c0d-8cad-fda212d52c70"
+									"customizedCheckpointKey": {
+										"value": "@pipeline().parameters.container",
+										"type": "Expression"
+									}
 								}
 							}
 						},
