@@ -1,0 +1,16 @@
+{
+	"name": "TaxiSample1",
+	"type": "Microsoft.Synapse/workspaces/linkedservices",
+	"properties": {
+		"annotations": [],
+		"type": "AzureBlobStorage",
+		"typeProperties": {
+			"sasUri": "https://sqlondemandstorage.blob.core.windows.net/public-parquet",
+			"encryptedCredential": "ew0KICAiVmVyc2lvbiI6ICIyMDE3LTExLTMwIiwNCiAgIlByb3RlY3Rpb25Nb2RlIjogIktleSIsDQogICJTZWNyZXRDb250ZW50VHlwZSI6ICJQbGFpbnRleHQiLA0KICAiQ3JlZGVudGlhbElkIjogIlNZTkFQU0VANzkxMjJDOEQtRjdGQy00Njk0LThCQTEtMDMyREIxMDNGNUQ5XzJkNTE3YjZhLWMyY2EtNDRhMy1iYWQ0LTU2ZTdlMTQ1NzhjNSINCn0="
+		},
+		"connectVia": {
+			"referenceName": "AutoResolveIntegrationRuntime",
+			"type": "IntegrationRuntimeReference"
+		}
+	}
+}

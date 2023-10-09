@@ -1,0 +1,16 @@
+{
+	"name": "CosmosDbNoSql1",
+	"type": "Microsoft.Synapse/workspaces/linkedservices",
+	"properties": {
+		"annotations": [],
+		"type": "CosmosDb",
+		"typeProperties": {
+			"connectionString": "AccountEndpoint=https://carolinacamilo0411.documents.azure.com:443/;Database=carolteste;",
+			"encryptedCredential": "ew0KICAiVmVyc2lvbiI6ICIyMDE3LTExLTMwIiwNCiAgIlByb3RlY3Rpb25Nb2RlIjogIktleSIsDQogICJTZWNyZXRDb250ZW50VHlwZSI6ICJQbGFpbnRleHQiLA0KICAiQ3JlZGVudGlhbElkIjogIlNZTkFQU0VANzkxMjJDOEQtRjdGQy00Njk0LThCQTEtMDMyREIxMDNGNUQ5XzQxMDk0ZGM2LWE0ZDUtNDRjMC05NzFkLWQ3NzJkYTNiYmViZiINCn0="
+		},
+		"connectVia": {
+			"referenceName": "AutoResolveIntegrationRuntime",
+			"type": "IntegrationRuntimeReference"
+		}
+	}
+}
