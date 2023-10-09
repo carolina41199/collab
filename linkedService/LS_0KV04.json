@@ -1,0 +1,11 @@
+{
+	"name": "LS_0KV04",
+	"properties": {
+		"annotations": [],
+		"type": "AzureKeyVault",
+		"typeProperties": {
+			"baseUrl": "https://BDO-KV04-GRP-DEV-EUR-WE.vault.azure.net/"
+		}
+	},
+	"type": "Microsoft.Synapse/workspaces/linkedservices"
+}

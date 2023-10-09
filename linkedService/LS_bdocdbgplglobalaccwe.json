@@ -1,0 +1,23 @@
+{
+	"name": "LS_bdocdbgplglobalaccwe",
+	"properties": {
+		"annotations": [],
+		"type": "CosmosDb",
+		"typeProperties": {
+			"connectionString": "AccountEndpoint=https://bdocdbgplglobalaccwe.documents.azure.com:443/;Database=globalservices",
+			"accountKey": {
+				"type": "AzureKeyVaultSecret",
+				"store": {
+					"referenceName": "LS_0KV04",
+					"type": "LinkedServiceReference"
+				},
+				"secretName": "grp-dlz-gpl-cosmos-acc-readonlykey"
+			}
+		},
+		"connectVia": {
+			"referenceName": "AutoResolveIntegrationRuntime",
+			"type": "IntegrationRuntimeReference"
+		}
+	},
+	"type": "Microsoft.Synapse/workspaces/linkedservices"
+}

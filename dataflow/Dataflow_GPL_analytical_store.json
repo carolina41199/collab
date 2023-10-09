@@ -1,0 +1,69 @@
+{
+	"name": "Dataflow_GPL_analytical_store",
+	"properties": {
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"linkedService": {
+						"referenceName": "LS_bdocdbgplglobalaccwe",
+						"type": "LinkedServiceReference"
+					},
+					"name": "Source"
+				}
+			],
+			"sinks": [
+				{
+					"linkedService": {
+						"referenceName": "LS_bdosagrprawdeveurwe",
+						"type": "LinkedServiceReference"
+					},
+					"name": "SinkRaw"
+				}
+			],
+			"transformations": [],
+			"scriptLines": [
+				"parameters{",
+				"     each_container as string,",
+				"     id_firm as string",
+				"}",
+				"source(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     container: ($each_container),",
+				"     storeType: 'olap',",
+				"     format: 'documentQuery',",
+				"     query: (concat(\"SELECT * FROM c WHERE c.partitionKey LIKE \\'\", $id_firm,\"%\\'\")),",
+				"     enableChangeFeed: true,",
+				"     changeFeedStartFromTheBeginning: true,",
+				"     captureIntermediateUpdate: false,",
+				"     captureUserDeletes: true,",
+				"     captureTxnTTLDeletes: true,",
+				"     store: 'cosmosDB',",
+				"     partitionBy('hash', 1)) ~> Source",
+				"Source sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     format: 'delta',",
+				"     compressionType: 'snappy',",
+				"     compressionLevel: 'Optimal',",
+				"     fileSystem: 'landing',",
+				"     folderPath: (concat('grp/GPL/BDO-GPL-FIRM',$id_firm,'/_datastore/',$each_container)),",
+				"     overwrite: true,",
+				"     mergeSchema: false,",
+				"     autoCompact: false,",
+				"     optimizedWrite: true,",
+				"     vacuum: 168,",
+				"     deletable: true,",
+				"     insertable: true,",
+				"     updateable: true,",
+				"     upsertable: false,",
+				"     keys:['_rid'],",
+				"     umask: 0022,",
+				"     preCommands: [],",
+				"     postCommands: [],",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true,",
+				"     saveOrder: 1) ~> SinkRaw"
+			]
+		}
+	}
+}

@@ -1,0 +1,42 @@
+{
+	"name": "DS_GPL_raw",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "LS_bdosagrprawdeveurwe",
+			"type": "LinkedServiceReference"
+		},
+		"parameters": {
+			"root": {
+				"type": "string",
+				"defaultValue": "landing"
+			},
+			"folder": {
+				"type": "string",
+				"defaultValue": "grp/GPL"
+			},
+			"firm_folder": {
+				"type": "string"
+			}
+		},
+		"folder": {
+			"name": "GPL"
+		},
+		"annotations": [],
+		"type": "Parquet",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobFSLocation",
+				"folderPath": {
+					"value": "@dataset().folder",
+					"type": "Expression"
+				},
+				"fileSystem": {
+					"value": "@dataset().root",
+					"type": "Expression"
+				}
+			},
+			"compressionCodec": "snappy"
+		},
+		"schema": []
+	}
+}

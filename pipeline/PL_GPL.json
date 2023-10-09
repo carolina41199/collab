@@ -1,0 +1,234 @@
+{
+	"name": "PL_GPL",
+	"properties": {
+		"activities": [
+			{
+				"name": "ForEach CosmosDB Container",
+				"description": "Iterating over CosmosDB containers",
+				"type": "ForEach",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"items": {
+						"value": "@array(split(pipeline().parameters.containers, ','))",
+						"type": "Expression"
+					},
+					"isSequential": true,
+					"activities": [
+						{
+							"name": "Data flow",
+							"type": "ExecuteDataFlow",
+							"dependsOn": [],
+							"policy": {
+								"timeout": "0.12:00:00",
+								"retry": 3,
+								"retryIntervalInSeconds": 30,
+								"secureOutput": false,
+								"secureInput": false
+							},
+							"userProperties": [],
+							"typeProperties": {
+								"dataflow": {
+									"referenceName": "Dataflow_GPL_analytical_store",
+									"type": "DataFlowReference",
+									"parameters": {
+										"each_container": {
+											"value": "'@{item()}'",
+											"type": "Expression"
+										},
+										"id_firm": {
+											"value": "'@{pipeline().parameters.firm_id}'",
+											"type": "Expression"
+										}
+									}
+								},
+								"compute": {
+									"coreCount": 8,
+									"computeType": "General"
+								},
+								"traceLevel": "Fine"
+							}
+						},
+						{
+							"name": "From Raw to Enriched",
+							"type": "Copy",
+							"dependsOn": [
+								{
+									"activity": "Data flow",
+									"dependencyConditions": [
+										"Succeeded"
+									]
+								}
+							],
+							"policy": {
+								"timeout": "0.12:00:00",
+								"retry": 3,
+								"retryIntervalInSeconds": 30,
+								"secureOutput": false,
+								"secureInput": false
+							},
+							"userProperties": [],
+							"typeProperties": {
+								"source": {
+									"type": "ParquetSource",
+									"storeSettings": {
+										"type": "AzureBlobFSReadSettings",
+										"recursive": true,
+										"wildcardFileName": {
+											"value": "**",
+											"type": "Expression"
+										},
+										"enablePartitionDiscovery": false
+									},
+									"formatSettings": {
+										"type": "ParquetReadSettings"
+									}
+								},
+								"sink": {
+									"type": "ParquetSink",
+									"storeSettings": {
+										"type": "AzureBlobFSWriteSettings"
+									},
+									"formatSettings": {
+										"type": "ParquetWriteSettings"
+									}
+								},
+								"enableStaging": false,
+								"translator": {
+									"type": "TabularTranslator",
+									"typeConversion": true,
+									"typeConversionSettings": {
+										"allowDataTruncation": true,
+										"treatBooleanAsNumber": false
+									}
+								}
+							},
+							"inputs": [
+								{
+									"referenceName": "DS_GPL_raw",
+									"type": "DatasetReference",
+									"parameters": {
+										"root": "landing",
+										"folder": "grp/GPL/",
+										"firm_folder": {
+											"value": "@concat('BDO-GPL-FIRM',pipeline().parameters.firm_id,'/_datastore')",
+											"type": "Expression"
+										}
+									}
+								}
+							],
+							"outputs": [
+								{
+									"referenceName": "DS_GPL_enr",
+									"type": "DatasetReference",
+									"parameters": {
+										"root": "standardized",
+										"folder": "grp/GPL",
+										"firm_folder": {
+											"value": "@concat('BDO-GPL-FIRM',pipeline().parameters.firm_id,'/_datastore')",
+											"type": "Expression"
+										}
+									}
+								}
+							]
+						},
+						{
+							"name": "From Enriched to Curated",
+							"type": "Copy",
+							"dependsOn": [
+								{
+									"activity": "From Raw to Enriched",
+									"dependencyConditions": [
+										"Succeeded"
+									]
+								}
+							],
+							"policy": {
+								"timeout": "0.12:00:00",
+								"retry": 3,
+								"retryIntervalInSeconds": 30,
+								"secureOutput": false,
+								"secureInput": false
+							},
+							"userProperties": [],
+							"typeProperties": {
+								"source": {
+									"type": "ParquetSource",
+									"storeSettings": {
+										"type": "AzureBlobFSReadSettings",
+										"recursive": true,
+										"wildcardFileName": {
+											"value": "**",
+											"type": "Expression"
+										},
+										"enablePartitionDiscovery": false
+									},
+									"formatSettings": {
+										"type": "ParquetReadSettings"
+									}
+								},
+								"sink": {
+									"type": "ParquetSink",
+									"storeSettings": {
+										"type": "AzureBlobFSWriteSettings"
+									},
+									"formatSettings": {
+										"type": "ParquetWriteSettings"
+									}
+								},
+								"enableStaging": false,
+								"translator": {
+									"type": "TabularTranslator",
+									"typeConversion": true,
+									"typeConversionSettings": {
+										"allowDataTruncation": true,
+										"treatBooleanAsNumber": false
+									}
+								}
+							},
+							"inputs": [
+								{
+									"referenceName": "DS_GPL_enr",
+									"type": "DatasetReference",
+									"parameters": {
+										"root": "standardized",
+										"folder": "grp/GPL",
+										"firm_folder": {
+											"value": "@concat('BDO-GPL-FIRM',pipeline().parameters.firm_id,'/_datastore')",
+											"type": "Expression"
+										}
+									}
+								}
+							],
+							"outputs": [
+								{
+									"referenceName": "DS_GPL_cur",
+									"type": "DatasetReference",
+									"parameters": {
+										"root": "dataproducts",
+										"folder": "grp/GPL",
+										"firm_folder": {
+											"value": "@concat('BDO-GPL-FIRM',pipeline().parameters.firm_id,'/_datastore')",
+											"type": "Expression"
+										}
+									}
+								}
+							]
+						}
+					]
+				}
+			}
+		],
+		"parameters": {
+			"containers": {
+				"type": "string",
+				"defaultValue": "clients,projects,tasks"
+			},
+			"firm_id": {
+				"type": "string",
+				"defaultValue": "146"
+			}
+		},
+		"annotations": []
+	}
+}
